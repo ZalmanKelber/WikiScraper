@@ -1,10 +1,7 @@
-/* canvas {
-  border: solid black 1px;
-} */
-
 .canvas-wrapper {
   display: flex;
   justify-content: center;
+  align-items: flex-end;
 }
 
 h1 {
@@ -19,7 +16,29 @@ h1 {
   font-size: 1rem;
 }
 
+.key {
+  font-family: 'Libre Baskerville', serif;
+}
+
 .article-display a {
   text-decoration: none;
   color: maroon;
+}
+
+.article-display a:hover {
+  color: crimson;
+}
+.outlink-color {
+  background-color: rgb(0, 0, 127);
+  color: rgb(0, 0, 127);
+}
+
+.inlink-color {
+  background-color: rgb(0, 127, 0);
+  color: rgb(0, 127, 0);
+}
+
+.inlink-outlink-color {
+  background-color: rgb(0, 127, 127);
+  color: rgb(0, 127, 127);
 }

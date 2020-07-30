@@ -13,9 +13,19 @@ ranks.forEach((page, index) => {
 
 function drawNode(node) {
   ctx.beginPath();
-  ctx.fillStyle = node.selected ? "rgba(127, 0, 0, .6)" : "rgba(60, 120, 255, .8)";
+  ctx.fillStyle = node.selected ? "rgba(127, 0, 0, 1)" : "rgba(0, 0, 0, .5)";
+  if (node.isInlink) {
+    ctx.fillStyle = "rgba(0, 127, 0, 1)"
+  }
+  if (node.isOutlink) {
+    ctx.fillStyle = "rgba(0, 0, 127, 1)"
+  }
+  if (node.isOutlink && node.isInlink) {
+    ctx.fillStyle = "rgba(0, 127, 127, 1)"
+  }
+  const resizeConstant = node.selected || node.isInlink || node.isOutlink ? 1.5 : 1
   ctx.moveTo(node.x, node.y);
-  ctx.arc(node.x, node.y, Math.ceil(r * node.rank) + 1, 0, 2* Math.PI);
+  ctx.arc(node.x, node.y, (Math.ceil(r * node.rank) + 1) * resizeConstant, 0, 2* Math.PI);
   ctx.fill();
   ctx.closePath();
 }
@@ -79,9 +89,25 @@ function dragstarted() {
   if (!d3.event.active) sim.alphaTarget(0.3).restart();
   d3.event.subject.fx = d3.event.subject.x;
   d3.event.subject.fy = d3.event.subject.y;
-  ranks.forEach(rank => rank.selected = false);
-  d3.event.subject.selected = true;
+  selectNodes(d3.event.subject.id)
   renderArticleDisplay(d3.event.subject);
+}
+
+function selectNodes(id) {
+  ranks.forEach(rank => {
+    rank.selected = false;
+    rank.isInlink = false;
+    rank.isOutlink = false;
+  });
+  ranks[ids[id]].selected = true;
+  routes.forEach(route => {
+    if (Number(route.from_id) === Number(id)) {
+      ranks[ids[route.to_id]].isOutlink = true;
+    }
+    if (Number(route.to_id) === Number(id)) {
+      ranks[ids[route.from_id]].isInlink = true;
+    }
+  });
 }
 
 function dragged() {
