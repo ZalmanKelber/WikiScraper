@@ -104,6 +104,7 @@ while len(stack) > 0:
 #remove duplicate articles
 for from_id in duplicates:
     cur.execute('UPDATE Routes SET to_id = ? WHERE to_id = ?', (duplicates[from_id], from_id))
-    cur.execute('DELETE from Articles WHERE id = ?', (from_id,))
+    cur.execute('DELETE FROM Articles WHERE id = ?', (from_id,))
+    cur.execute('DELETE FROM Routes WHERE from_id = to_id')
 conn.commit()
 conn.close()
